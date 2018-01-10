@@ -102,6 +102,7 @@ ENV/
 
 # PyCharm
 .idea/
+_network/
 
 # Windows
 desktop.ini
