@@ -86,8 +86,8 @@ class BallInteractive(drawable):
         # on crée ensuite un vecteur allant du y le plus bas et du x le plus a droite
         # et on ajoute 100 en bas (meilleur représentation)
         # Cf: voire compte rendu pour plus de détails
-        upperLeft  = Vector2(x_min, y_min) + Vector2(0, -100)
-        lowerRight = Vector2(x_max, y_max) + Vector2(0, 100)
+        upperLeft  = Vector2(x_min, y_min) #+ Vector2(-100, -100)
+        lowerRight = Vector2(x_max, y_max) #+ Vector2(-100, 100)
 
         # création du vecteur des mains ainsi que redimentionnement de la texture pour la stocker dans le cache
         self._handsVector = Vector2.fromPoints(upperLeft, lowerRight)
@@ -141,37 +141,15 @@ class BallInteractive(drawable):
     def _update_hands_pos(self):
 
         # récupère le premier body de la Kinect
-        body = self._kinect.firstBody
+        leftPoint, leftState, rightPoint, rightState = self._kinect.getFirstBodyHandsPos()
+        if not Vector2.isVector(leftPoint) and not Vector2.isVector(rightPoint):
+            return -1
 
-        # récupérer les joints du body ainsi que leurs coordonnées dans l'espace de caméra de couleur
-        joints = body.joints
-        joint_points = self._kinect.body_joints_to_color_space(joints)
-
-        # récupération de l'état de tracking des 2 mains
-        leftHand_TrackState = joints[JointType_HandLeft].TrackingState
-        rightHand_TrackState = joints[JointType_HandRight].TrackingState
-
-        # récupération de l'état des 2 mains (lasso, ouvert, fermé, non référancé, inconnu)
-        handsState = [body.hand_left_state, body.hand_right_state]
-
-        # si les 2 mains ne sont pas tracké ou que l'une des 2 est hors zone on retourne 1 (non ref)
-        if (leftHand_TrackState == TrackingState_NotTracked and  rightHand_TrackState == TrackingState_NotTracked or
-            (leftHand_TrackState == TrackingState_Inferred or rightHand_TrackState == TrackingState_Inferred)):
-            return 1
-
-        # si l'une des coordonnée de l'un des points de la main est à -inf on retourne 1 (non ref)
-        if (joint_points[JointType_HandLeft].x == float("-inf") or
-            joint_points[JointType_HandLeft].y == float("-inf") or
-            joint_points[JointType_HandRight].x == float("-inf") or
-            joint_points[JointType_HandRight].y == float("-inf")):
-            return 1
-
-        # création des 2 points Vector2 depuis les points PyKinect
-        leftPoint = Vector2.fromKinectPoint(joint_points[JointType_HandLeft])
-        rightPoint = Vector2.fromKinectPoint(joint_points[JointType_HandRight])
+        # enregistrement des positions des mains
+        self.hands = [leftPoint, rightPoint]
 
         # si l'état de l'une des 2 mains est fermé (pas les 2 car difficultées de détection des mains proches du body)
-        if handsState[0] == HandState_Closed or handsState[1] == HandState_Closed:
+        if leftState == HandState_Closed or rightState == HandState_Closed:
 
             # si la balle est locked
             if self._locked:
@@ -179,16 +157,12 @@ class BallInteractive(drawable):
                 if (Vector2.fromPoints(leftPoint, self._center).len() <= 200 or
                     Vector2.fromPoints(rightPoint, self._center).len() <= 200):
                         self._locked = False
-
-            # enregistrement des positions des mains
-            self.hands = [leftPoint, rightPoint]
-
             # retourne 0 (réussite)
             return 0
 
         # sinon si l'état des 2 mains est non tracké
         # (si les mains sont trop proches du centre pour avoir un état identifié)
-        elif handsState[0] == HandState_NotTracked and handsState[1] == HandState_NotTracked:
+        elif leftState == HandState_NotTracked and rightState == HandState_NotTracked:
 
             # si la balle n'est pas marqué comme ayant explosé
             if not self._explode:

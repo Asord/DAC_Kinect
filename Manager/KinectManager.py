@@ -79,6 +79,7 @@ class KinectManager:
         # Liaison d'une methode de PyKinect a KinectManager
         self.body_joints_to_color_space = self._kinect.body_joints_to_color_space
 
+
     # récupère le premier body trouvé
     def get_first_body(self):
 
@@ -239,6 +240,38 @@ class KinectManager:
 
             # on libère la surface cible
             target_surface.unlock()
+
+    def getFirstBodyHandsPos(self):
+        # met à jour et récupère le premier body trouvé, si il est inexistant alors on n'execute pas la methode
+        body = self.get_first_body()
+        if body is None: return -1, -1, -1, -1
+
+        # récupère la liste des joints du body
+        joints = body.joints
+
+        # Convertie les points dans le repère de la caméra
+        joint_points = self._kinect.body_joints_to_color_space(joints)
+        # Récupère les points des 2 mains
+        right_point = joint_points[PyKinectV2.JointType_HandRight]
+        left_point = joint_points[PyKinectV2.JointType_HandLeft]
+
+        # si l'une des coordonnées de l'une des main est -inf alors on retourne
+        if (right_point.x == float("-inf") or
+            right_point.y == float("-inf") or
+            left_point.x == float("-inf") or
+            left_point.y == float("-inf")):
+            return -1, -1, -1, -1
+
+        # sinon on convertie les points Kinect en points Vector2
+        right_hand_pos = Vector2.fromKinectPoint(right_point)
+        left_hand_pos = Vector2.fromKinectPoint(left_point)
+
+        # on récupère l'état des 2 mains
+        right_hand_state = self.firstBody.hand_right_state
+        left_hand_state = self.firstBody.hand_left_state
+
+        return right_hand_pos, right_hand_state, left_hand_pos, left_hand_state
+
 
     # getter du KinectRuntime
     def getKinect(self):
