@@ -1,6 +1,6 @@
 from abc import abstractmethod, ABCMeta
 
-# abstract class drawable for drawable pygame objects
+# classe abstraite pour les objets de type drawable (doivent contenir et redéfinire update() et draw()
 class drawable(object, metaclass=ABCMeta):
 
     @abstractmethod
