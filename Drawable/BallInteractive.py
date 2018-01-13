@@ -4,9 +4,9 @@ from Utilities.Vector import Vector2
 
 from pygame import transform
 
-from __lib.PyKinectV2 import JointType_HandLeft, JointType_HandRight
-from __lib.PyKinectRuntime import TrackingState_NotTracked, TrackingState_Inferred
-from __lib.PyKinectRuntime import HandState_Closed, HandState_NotTracked
+from pykinect2.PyKinectV2 import JointType_HandLeft, JointType_HandRight
+from pykinect2.PyKinectRuntime import TrackingState_NotTracked, TrackingState_Inferred
+from pykinect2.PyKinectRuntime import HandState_Closed, HandState_NotTracked
 
 class BallInteractive(drawable):
 

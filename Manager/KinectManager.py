@@ -1,5 +1,5 @@
-from __lib import PyKinectV2
-from __lib import PyKinectRuntime
+from pykinect2 import PyKinectV2
+from pykinect2 import PyKinectRuntime
 
 from Utilities.Vector import Vector2
 from Manager.BodyPart import BodyPart

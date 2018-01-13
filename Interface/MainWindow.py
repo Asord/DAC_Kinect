@@ -1,3 +1,4 @@
+# coding: utf8
 from Manager.KinectManager import KinectManager
 from Drawable.SnowGenerator import SnowGenerator
 from Drawable.BallInteractive import BallInteractive
@@ -110,7 +111,7 @@ class MainWindow:
                 # si il existe bien un body alors executer le script d'intéraction correspondant au mode
                 if body is not None:
                     if self._mode == 'Snow': self._snow.draw(self._frame_surface)
-                    elif self._mode == 'Ball': self._ball.draw(self._screen)
+                    elif self._mode == 'Ball': self._ball.draw(self._frame_surface)
 
             # mettre a jour les nouvelles informations de dessin
             display.flip()

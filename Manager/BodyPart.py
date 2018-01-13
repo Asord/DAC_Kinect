@@ -1,3 +1,4 @@
+# coding: utf8
 from Utilities.globals import Globals
 from Utilities.Vector import Vector2
 

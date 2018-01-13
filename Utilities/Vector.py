@@ -1,3 +1,4 @@
+# coding: utf8
 from math import sqrt, radians, pi
 from math import sin as math_sin, cos as math_cos
 
@@ -7,7 +8,7 @@ from pygame import draw
 
 class Vector2:
     # Vector2 gère un vecteur de dimention 2 représentant des vecteurs, et des points d'un espace 2D
-    def __init__(self, x: float, y: float):
+    def __init__(self, x, y):
         self.x = x
         self.y = y
 
