@@ -1,4 +1,4 @@
-Globals = ["Debug"]
+Globals = []
 
 # possible globals:
 #   "Debug"

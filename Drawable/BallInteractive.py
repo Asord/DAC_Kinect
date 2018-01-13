@@ -81,11 +81,11 @@ class BallInteractive(drawable):
         x_min = min(self.hands[0].x, self.hands[1].x)
         x_max = max(self.hands[0].x, self.hands[1].x)
 
-        # on crée un vecteur allant du y le plus haut et du x le plus à gauche
-        # et on ajour 100 de hauteur (meilleur représentation)
-        # on crée ensuite un vecteur allant du y le plus bas et du x le plus a droite
-        # et on ajoute 100 en bas (meilleur représentation)
-        # Cf: voire compte rendu pour plus de détails
+        # on crée un vecteur allant du x_gauche, y_haut
+        # et on soustrait 100 de y (meilleur représentation)
+        # on crée ensuite un vecteur allant du x_droit, y_bas
+        # et on ajoute 100 en y (meilleur représentation)
+        # Cela permet d'obtenir un rectangle qui contiendra la balle
         upperLeft  = Vector2(x_min, y_min) #+ Vector2(-100, -100)
         lowerRight = Vector2(x_max, y_max) #+ Vector2(-100, 100)
 

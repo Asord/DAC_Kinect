@@ -27,7 +27,9 @@ class BodyPart(drawable):
         # vecteur temporaire ayant la même direction que vect mais avec la taille de size
         _tmpA = self.vect.resize(self.size)
 
-        # détermine la rotation nécéssaire selon la direction du vecteur (voire compte rendu pour plus d'informations)
+        # selon la direction du vecteur, effectuer une rotation horaire ou antihoraire au vecteur pour récupérer
+        # la normale dirigé vers le haut de l'écran. Ceci permettera de calculer la position de la ligne suppérieure
+        # du membre volumineux
         if self.vect.x < 0:
             _startA = self.pA + _tmpA.rad_rotate(0.5)
             _startB = self.pA + _tmpA.deg_rotate(-0.5)
@@ -95,10 +97,11 @@ class BodyPart(drawable):
         proj = self.vect.projectOn(normal)
 
         # si je projeté à une taille comprise entre la taille de l'objet et du flocon
-        # que le produit scalaire du projeté en x est du vecteur [A; flocon] est > 0 et
-        # que le produit scalaire du projeté en x du vecteur [B; flocon] est < 0
-        # Donc si le flocon se trouve proche et au dessus de la ligne (voire compte rendu), il est en collision
-        # alors retourner True
+        # et que le produit scalaire du projeté en x est du vecteur [A; flocon] est > 0
+        #     flocon côté de la ligne par rapport à A
+        # et que le produit scalaire du projeté en x du vecteur [B; flocon] est < 0
+        #     flocon côté de la ligne par rapport à B
+        # Donc le flocon est en collision alors retourner True
         if (-self.size < proj <= snowflake.size and
             self.projected_x.dot(startToBall) > 0 and
             self.projected_x.dot(endToBall) < 0):
